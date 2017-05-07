@@ -1,6 +1,6 @@
 # Open source used for GBANG-SHOCK
 
-# SensorDashboard
+* SensorDashboard
 
 A sensor dashboard for Android plotting all sensor data of your Android wearable.
 
@@ -12,7 +12,7 @@ Written at the Android Wear Hackathon 2014 in London by [Juhani Lehtimäki](http
 
 Get it from Google Play: https://play.google.com/store/apps/details?id=com.github.pocmo.sensordashboard
 
-# License
+* License
 
     Copyright 2014 Juhani Lehtimäki, Benjamin Stürmer, Sebastian Kaspari
     

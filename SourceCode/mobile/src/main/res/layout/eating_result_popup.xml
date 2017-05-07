@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="300dp"
+    android:layout_height="510dp"
+    android:layout_gravity="center"
+    android:background="@color/transparent"
+    tools:context=".ui.eating.EatingResultPopup">
+
+
+    <ImageView
+        android:id="@+id/spoon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/spoon1"
+        android:layout_marginTop="50dp"
+        android:layout_centerHorizontal="true"
+        />
+
+
+    <TextView
+        android:id="@+id/txt1"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/spoon"
+        android:text="Count"
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="15dp"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        />
+    <TextView
+        android:id="@+id/countResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt1"
+        android:textColor="#ffffff"
+        android:layout_margin="15dp"
+        android:text="0"
+        android:textSize="50sp"
+        />
+
+    <TextView
+        android:id="@+id/txt2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/countResult"
+        android:text="Average Term"
+        android:layout_marginLeft="15dp"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        />
+
+    <TextView
+        android:id="@+id/termResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt2"
+        android:textColor="#ffffff"
+        android:layout_margin="15dp"
+        android:text="00:00"
+        android:textSize="35sp"
+        />
+
+
+    <TextView
+        android:id="@+id/txt3"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/termResult"
+        android:text="Eating Time"
+        android:layout_marginLeft="15dp"
+        android:textSize="20sp"
+        android:textColor="#ffffff"
+        />
+
+
+
+    <TextView
+        android:id="@+id/timeResult"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/txt3"
+        android:textColor="#ffffff"
+        android:layout_margin="15dp"
+        android:text="00:00:00"
+        android:textSize="35sp"
+        />
+
+
+
+</RelativeLayout>

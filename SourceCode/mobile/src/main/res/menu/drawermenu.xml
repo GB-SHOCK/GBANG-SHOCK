@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_id_home"
+        android:icon="@android:drawable/ic_menu_camera"
+        android:title="Home" />
+
+    <item android:title="MY GBS">
+        <menu>
+            <item
+                android:id="@+id/nav_id_eating"
+                android:icon="@android:drawable/ic_menu_camera"
+                android:title="Eating SHOCK" />
+
+            <item
+                android:id="@+id/nav_id_moving"
+                android:icon="@android:drawable/ic_menu_gallery"
+                android:title="Moving SHOCK" />
+
+            <item
+                android:id="@+id/nav_id_gbang"
+                android:icon="@android:drawable/ic_menu_set_as"
+                android:title="Gbang SHOCK" />
+
+
+        </menu>
+    </item>
+
+    <item android:title="My Page">
+        <menu>
+            <item
+                android:id="@+id/nav_id_logout"
+                android:icon="@android:drawable/ic_menu_set_as"
+                android:title="Logout" />
+
+        </menu>
+    </item>
+
+
+
+</menu>

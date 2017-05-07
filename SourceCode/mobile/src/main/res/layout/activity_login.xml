@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:paddingBottom="@dimen/activity_vertical_margin"
+    android:paddingLeft="@dimen/activity_horizontal_margin"
+    android:paddingRight="@dimen/activity_horizontal_margin"
+    android:paddingTop="@dimen/activity_vertical_margin"
+    tools:context=".user.LoginActivity"
+    android:background="#e8d8bd"
+    >
+    <ImageView
+        android:layout_height="100dp"
+        android:layout_width="wrap_content"
+        android:src="@drawable/w_logo"
+        android:layout_marginTop="100dp"
+        android:layout_alignParentTop="true"
+        android:layout_centerHorizontal="true"
+        android:id="@+id/imageViewLogo"/>
+
+
+
+    <!--Login Form : ID, ID_input,login button, sign up button-->
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewLogo"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop = "50dp"
+        android:padding = "7dp"
+        android:id="@+id/idtv"
+        android:textSize="20dp"
+        android:text="ID  "
+        android:textColor="#ffffff"
+        />
+
+    <EditText
+        android:id="@+id/userID"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/imageViewLogo"
+        android:layout_toRightOf="@+id/idtv"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop = "50dp"
+        android:textColor="#ffffff"
+        />
+
+    <TextView
+
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idtv"
+        android:layout_marginLeft="60dp"
+        android:layout_marginTop = "10dp"
+        android:padding = "7dp"
+        android:id="@+id/pwtv"
+        android:textSize="20dp"
+        android:text="PW"
+        android:textColor="#ffffff"
+        />
+
+    <EditText
+        android:id="@+id/userPW"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/idtv"
+        android:layout_toRightOf="@+id/pwtv"
+        android:password="true"
+        android:layout_marginRight="70dp"
+        android:layout_marginTop = "10dp"
+        android:textColor="#ffffff"
+        />
+
+    <RelativeLayout
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/pwtv"
+        android:layout_centerInParent="true"
+        android:layout_marginTop="40dp"
+        android:layout_centerVertical="true"
+        >
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/login_bt"
+            android:background="#e8d8bd"
+            android:id="@+id/login_bt"
+            android:layout_marginRight="5dp"
+            android:adjustViewBounds = "true"
+            android:scaleType ="fitXY"
+            android:maxWidth="110dp"
+            android:maxHeight="80dp"
+
+
+            />
+
+        <ImageButton
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@drawable/signup_bt"
+            android:layout_toRightOf="@+id/login_bt"
+            android:background="#e8d8bd"
+            android:id="@+id/signup_bt"
+            android:adjustViewBounds = "true"
+            android:scaleType ="fitXY"
+            android:maxWidth="110dp"
+            android:maxHeight="80dp"
+
+            />
+    </RelativeLayout>
+</RelativeLayout>

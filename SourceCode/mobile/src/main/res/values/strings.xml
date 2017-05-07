@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="app_name">GBANGSHOCK</string>
+    <string name="desc">Step Count</string>
+
+    <string name="title1">Today</string>
+
+    <string name="unit1">Steps</string>
+    <string name="title_activity_signup">SignupActivity</string>
+</resources>

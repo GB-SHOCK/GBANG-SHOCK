@@ -1,0 +1,66 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.github.pocmo.sensordashboard">
+
+    <uses-permission android:name="android.permission.BODY_SENSORS" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@drawable/gbangshockicon"
+        android:label="@string/app_name"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+        <meta-data
+            android:name="com.samsung.android.health.permission.read"
+            android:value="com.samsung.health.step_count" />
+
+        <activity
+            android:name=".ui.MainActivity"
+            android:label="@string/app_name">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".user.LoginActivity" />
+        <activity android:name=".EatingActivity" />
+        <activity android:name=".ui.DayFragment" />
+        <activity android:name=".ui.SplashActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ui.eating.EatingDayFragment" />
+        <activity android:name=".ui.eating.EatingWeekFragment" />
+        <activity android:name=".ui.eating.EatingMonthFragment" />
+        <activity android:name=".ui.eating.EatingTabFragment" />
+        <activity android:name=".ui.moving.MovingDayFragment" />
+        <activity android:name=".ui.moving.MovingWeekFragment" />
+        <activity android:name=".ui.moving.MovingMonthFragment" />
+        <activity android:name=".ui.moving.MovingTabFragment" />
+        <activity android:name=".ui.gbang.GbangDayFragment" />
+        <activity android:name=".ui.gbang.GbangWeekFragment" />
+        <activity android:name=".ui.gbang.GbangMonthFragment" />
+        <activity android:name=".ui.gbang.GbangTabFragment" />
+        <activity
+            android:name=".ui.eating.EatingResultPopup"
+            android:theme="@style/Transparent" />
+
+        <service android:name=".ui.moving.StepCountReporter" />
+
+        <activity
+            android:name=".user.SignupActivity"
+            android:label="@string/title_activity_signup"
+            android:theme="@style/AppTheme.NoActionBar" />
+
+        <receiver android:name=".ui.moving.DayTask" android:process=":remote" />
+
+    </application>
+
+</manifest>

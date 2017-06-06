@@ -2,6 +2,7 @@ package com.github.pocmo.sensordashboard.ui;
 
 import android.app.AlarmManager;
 import android.app.PendingIntent;
+import android.content.Context;
 import android.content.Intent;
 
 import android.os.Bundle;
@@ -19,6 +20,7 @@ import android.view.View;
 
 import com.github.pocmo.sensordashboard.EatingActivity;
 import com.github.pocmo.sensordashboard.R;
+import com.github.pocmo.sensordashboard.ui.eating.EatingDayFragment;
 import com.github.pocmo.sensordashboard.ui.eating.EatingTabFragment;
 import com.github.pocmo.sensordashboard.ui.moving.DayTask;
 import com.github.pocmo.sensordashboard.ui.moving.MovingDayFragment;
@@ -36,6 +38,7 @@ public class MainActivity extends AppCompatActivity {
     FragmentManager mFragmentManager;
     FragmentTransaction mFragmentTransaction;
 
+
     private FloatingActionButton fab;
 
     @Override
@@ -43,6 +46,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         registerAlarm();
+ //   }
+/*
+    @Override
+    protected void onStart(){
+        super.onStart();
+*/
             /*floating button - eating
             * */
         fab = (FloatingActionButton) findViewById(R.id.fab);
@@ -51,6 +60,7 @@ public class MainActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intent = new Intent(MainActivity.this, EatingActivity.class);
                 startActivity(intent);
+
             }
         });
 
@@ -118,7 +128,16 @@ public class MainActivity extends AppCompatActivity {
         mDrawerLayout.setDrawerListener(mDrawerToggle);
 
         mDrawerToggle.syncState();
+    }
 
+    @Override
+    protected void onResume() {
+        super.onResume();
+    }
+
+    @Override
+    protected void onPause() {
+        super.onPause();
 
     }
 

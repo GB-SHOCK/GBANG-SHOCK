@@ -44,7 +44,9 @@ public class StepCountReporter {
         mStore = store;
         stepValue = c.getSharedPreferences("step", Context.MODE_PRIVATE);
         stepEditor = stepValue.edit();
-
+        stepEditor.putInt(0 + "", 0);
+        stepEditor.putInt(1 + "", 10);
+        stepEditor.commit();
         readTodayStepCount();
 
 
@@ -128,7 +130,14 @@ public class StepCountReporter {
                 //   시간 당 스텝 수 저장
             //count  = 0 되면 sharedPreference 초기화
             if(count==0){
-                stepEditor.clear().commit();
+                //stepEditor.clear().commit();
+              //  for(int i = 0 ;i <24 ; i++){
+
+                    stepEditor.putInt(0 + "", 0);
+                    stepEditor.putInt(1 + "", 10);
+                    stepEditor.commit();
+             //   }
+
             }
             //아니라면(Today) 저장
             else {

@@ -43,7 +43,13 @@ public class GbangWeekFragment extends Fragment {
     private static final String m_TAG_COUNT = "step_count";
     private static final String m_TAG_DATE = "timestamp";
 
-
+    private Context context;
+    SharedPreferences user;
+    private String userA;
+    private String userG;
+    private String userH;
+    private String userW;
+    private float userBMR;
 
     @Nullable
     @Override
@@ -58,7 +64,22 @@ public class GbangWeekFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         weekGbangShockGraphView = (ViewGroup) rootView.findViewById(R.id.gbangWeekGraphView);
         coachView = (TextView) rootView.findViewById(R.id.weekGbang);
+        context= this.getActivity();
+        user = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        userA = user.getString("userAge", "1");
+        userG = user.getString("userGender", "m");
+        userH = user.getString("userHeight", "1");
+        userW = user.getString("userWeight", "1");
 
+        //l   BMR(남)  = (10 × W) + (6.25 × H) - (5 × A) + 5
+        // l   BMR(여) = (10 × W) + (6.25 × H) - (5 × A) – 161
+
+        if(userG.equals("m")){
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) + 5);
+        }
+        else{
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) - 161);
+        }
 
         //download = new ServerDownload();
         //setLineCompareGraph();
@@ -134,6 +155,7 @@ public class GbangWeekFragment extends Fragment {
 
         //eating graph
         float[] graph1 = new float[eSize];
+        float totalGraph1 = 0, totalGraph2 = 0;
 
         for (int i = 0; i < eSize; i++) {
 
@@ -146,25 +168,37 @@ public class GbangWeekFragment extends Fragment {
 
             if (maxValue < graph1[i])
                 maxValue = (int) graph1[i];
+
+            totalGraph1+=graph1[i];
         }
 
 
-
         float[] graph2 = new float[mSize];
-
+        float mile, mPerC,temp;
         for (int i = 0; i < mSize; i++) {
 
             String arr[] = mWeek.get(i).get(m_TAG_DATE).split("-");
             legendArr[i] = Integer.parseInt(arr[2]) + "";
             Log.d("week time", legendArr[i]);
 
-            graph2[i] = Float.parseFloat(mWeek.get(i).get(m_TAG_COUNT)) * (float)0.4;
+            temp = Float.parseFloat(mWeek.get(i).get(m_TAG_COUNT));
+            mile = ((Float.parseFloat(userH) - 100) * temp) / 100;
+            mPerC = (float) (3.7103 + 0.2678 * Float.parseFloat(userW) + (0.0359 * temp * 60 * 0.0006213) * 2) * Float.parseFloat(userW);
+            graph2[i] = (float) (mile * mPerC * 0.00006213);
+
             Log.d("week count",graph2[i]+"");
 
-            if (maxValue < graph2[i])
+            if (maxValue <= graph2[i])
                 maxValue = (int) graph2[i];
-        }
 
+            totalGraph2+=graph2[i];
+        }
+        increment = maxValue/8;
+
+
+        float bmrSum = 0;
+        for(int i = 0 ; i<mSize;i++)
+            bmrSum+=userBMR;
 
 
 
@@ -192,6 +226,23 @@ public class GbangWeekFragment extends Fragment {
 //		LineGraphVO vo = new LineGraphVO(
 //				paddingBottom, paddingTop, paddingLeft, paddingRight,
 //				marginTop, marginRight, maxValue, increment, legendArr, arrGraph, R.drawable.bg);
+        if (totalGraph1>totalGraph2) {
+            coachView.setText("이번 주는 권장 칼로리보다 " + (totalGraph1 - totalGraph2) + "kcal 더 드셨습니다.\n 잘하셨지만, 무조건 굶는 것은 요요의 지름길!");
+
+        }
+        else if(totalGraph1==0){
+
+            coachView.setText("이번 주는 식사를 하지 않으셨네요! 규칙적인 식사가 중요합니다!");
+
+        }
+        else if(totalGraph1==totalGraph2){
+
+            coachView.setText("이번 주는 권장 칼로리 모두 섭취! 잘하셨습니다!! 지금 운동하면 지방이 SHOCK!");
+        }
+        else {
+            coachView.setText("이번 주는 권장 칼로리보다 " + (totalGraph2 - totalGraph1) + "kcal 덜 드셨습니다.\n 잘 하셨지만, 규칙적인 식사만이 건강을 유지할 수 있는 법!");
+        }
+
         return vo;
 
     }

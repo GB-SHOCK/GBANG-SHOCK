@@ -80,7 +80,7 @@ public class EatingWeekData {
 
                 BufferedReader bufferedReader = null;
                 try {
-                    String link = "http://52.78.78.185/eating_week.php";
+                    String link = "http://52.78.246.112/eating_week.php";
 
                     String data = URLEncoder.encode("USERID", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8");
                     //String uri = params[0];

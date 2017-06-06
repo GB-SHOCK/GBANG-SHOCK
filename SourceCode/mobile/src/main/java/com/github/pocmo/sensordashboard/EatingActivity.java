@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.github.pocmo.sensordashboard.Server.ServerDownload;
 import com.github.pocmo.sensordashboard.Server.ServerUpload;
 import com.github.pocmo.sensordashboard.algorithm.EatingCount;
+import com.github.pocmo.sensordashboard.ui.MainActivity;
 import com.github.pocmo.sensordashboard.ui.eating.EatingResultPopup;
 
 public class EatingActivity extends Activity {
@@ -28,6 +29,7 @@ public class EatingActivity extends Activity {
     private ServerUpload update;
     private SensorReceive sensorThread;
     private EatingCount eatingCount = new EatingCount();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,16 +46,16 @@ public class EatingActivity extends Activity {
                                    public void onClick(View v) {
                                        if (btn.getText().toString().equals("EATING  START")) {
 
-                                           new SensorReceive(countView, termView).execute();
+                                           sensorThread = new SensorReceive(countView, termView);
+                                           sensorThread.execute();
                                            btn.setText("STOP");
                                            stateView.setText("Spoon");
-                                           if(countView.equals("1")) {
-                                               startT = SystemClock.elapsedRealtime();
-                                           }
+                                           startT = SystemClock.elapsedRealtime();
+
 
                                        } else if (btn.getText().toString().equals("STOP")) {
 
-                                           if(sensorThread!=null) {
+                                           if (sensorThread != null) {
                                                sensorThread.cancel(true);
                                            }
 
@@ -74,22 +76,18 @@ public class EatingActivity extends Activity {
                                            intentPopup.putExtra("term", term);
                                            intentPopup.putExtra("time", time);
                                            startActivity(intentPopup);
+                                           finish();
 
                                            //upload to server database
                                            update = new ServerUpload();
-                                           update.insertEatingTable(count, eatingCount.getAverage_term()+"", eating_time+"");
+                                           update.insertEatingTable(count, eatingCount.getAverage_term() + "", eating_time + "");
+
 
 
                                        }
                                    }
                                }
         );
-
-        // Intent intent = new Intent(this, SensorReceive.class);
-        //   intent.putExtra("eatT",eating_time);
-        //  startActivity(intent);
-        //  finish();
-
     }
 
     @Override

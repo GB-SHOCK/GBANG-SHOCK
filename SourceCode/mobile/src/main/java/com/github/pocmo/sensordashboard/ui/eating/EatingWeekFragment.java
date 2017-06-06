@@ -1,5 +1,7 @@
 package com.github.pocmo.sensordashboard.ui.eating;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -31,6 +33,14 @@ public class EatingWeekFragment  extends Fragment {
     private static final String TAG_DATE = "eating_date";
     private static final String TAG_COUNT = "eating_count";
 
+
+    private Context context;
+    SharedPreferences user;
+    private String userA;
+    private String userG;
+    private String userH;
+    private String userW;
+    private float userBMR;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -43,7 +53,24 @@ public class EatingWeekFragment  extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         eatingWeekGraphView = (ViewGroup) rootView.findViewById(R.id.eatingWeekGraphView);
+        //user inform download
+        context=this.getActivity();
+        user = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        userA = user.getString("userAge", "1");
+        userG = user.getString("userGender", "m");
+        userH = user.getString("userHeight", "1");
+        userW = user.getString("userWeight", "1");
 
+
+        //l   BMR(남)  = (10 × W) + (6.25 × H) - (5 × A) + 5
+        // l   BMR(여) = (10 × W) + (6.25 × H) - (5 × A) – 161
+
+        if(userG.equals("m")){
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) + 5);
+        }
+        else{
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) - 161);
+        }
         //   setCurveGraph();
     }
 
@@ -102,7 +129,7 @@ public class EatingWeekFragment  extends Fragment {
         int size = week.size();
         String[] legendArr = new String[size];
         float[] graph1 = new float[size];
-
+        float totalGraph=0;
         for (int i = 0; i < size; i++) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
             //String[] t = dateFormat.format(System.currentTimeMillis()).split("-");
@@ -114,10 +141,14 @@ public class EatingWeekFragment  extends Fragment {
             graph1[i] = Float.parseFloat(week.get(i).get(TAG_COUNT)) * (float)12;
             Log.d("week count",graph1[i]+"");
 
-
+            totalGraph+=graph1[i];
             if (maxValue < graph1[i])
                 maxValue = (int) graph1[i];
         }
+        float bmrSum=0;
+
+        for(int i = 0; i<size ; i++)
+            bmrSum+=userBMR;
 
 
         List<CurveGraph> arrGraph = new ArrayList<CurveGraph>();
@@ -142,6 +173,18 @@ public class EatingWeekFragment  extends Fragment {
 //		CurveGraphVO vo = new CurveGraphVO(
 //				paddingBottom, paddingTop, paddingLeft, paddingRight,
 //				marginTop, marginRight, maxValue, increment, legendArr, arrGraph, R.drawable.bg);
+        if(totalGraph<bmrSum) {
+            weekEating.setText("이번 주는 권장 칼로리 보다 " + (bmrSum - totalGraph) +"kcal 덜 드셨습니다! 식단 조절도 중요하지만 굶는 것은 요요의 지름길!");
+        }
+        else if (totalGraph == bmrSum){
+
+            weekEating.setText("이번 주 권장 칼로리 모두 섭취하셨습니다! 운동 시작!");
+        }
+        else{
+            weekEating.setText("이번 주는 권장 칼로리 보다 " + (totalGraph-bmrSum) +"kcal 더 드셨습니다! 이번 주는 칼로리 Burning Week!");
+        }
+
+
         return vo;
     }
 

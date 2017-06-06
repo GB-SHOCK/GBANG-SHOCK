@@ -81,7 +81,7 @@ public class MovingWeekData {
 
                 BufferedReader bufferedReader = null;
                 try {
-                    String link = "http://52.78.78.185/moving_week.php";
+                    String link = "http://52.78.246.112/moving_week.php";
 
                     String data = URLEncoder.encode("USERID", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8");
                     //String uri = params[0];

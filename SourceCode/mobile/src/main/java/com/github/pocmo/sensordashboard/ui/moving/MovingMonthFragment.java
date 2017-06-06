@@ -1,5 +1,7 @@
 package com.github.pocmo.sensordashboard.ui.moving;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -29,7 +31,10 @@ public class MovingMonthFragment  extends Fragment {
     private ArrayList<HashMap<String, String>> month;
     private static final String TAG_DATE = "timestamp";
     private static final String TAG_COUNT = "step_count";
-
+    private Context c;
+    SharedPreferences user;
+    private String userH;
+    private String userW;
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -44,6 +49,11 @@ public class MovingMonthFragment  extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         movingMonthGraphView = (ViewGroup) rootView.findViewById(R.id.movingMonthGraphView);
+        c = this.getActivity();
+        //user info read
+        user = c.getSharedPreferences("user", c.MODE_PRIVATE);
+        userH = user.getString("userHeight", "1");
+        userW = user.getString("userWeight","1");
         //  setCurveGraph();
     }
 
@@ -99,13 +109,13 @@ public class MovingMonthFragment  extends Fragment {
         int maxValue = CurveGraphVO.DEFAULT_MAX_VALUE;
 
         //increment
-        int increment = CurveGraphVO.DEFAULT_INCREMENT;
+        int increment = 1000;
 
 //        String[] legendArr = new String[step.size() ];
         month = monthData.getDataList();
         int size = month.size();
         float kSum = 0, kAvg = 0,sSum=0,sAvg=0;
-
+        float mile, mPerC;
         String[] legendArr = new String[size];
 //        String[] legendArr = {"1","2","3","4","5"};
 
@@ -120,17 +130,19 @@ public class MovingMonthFragment  extends Fragment {
             legendArr[i] = Integer.parseInt(arr[1]) + "";
             Log.d("monthtime", legendArr[i]);
 
-
             step[i] = Float.parseFloat(month.get(i).get(TAG_COUNT));
-            graph1[i] = step[i] * (float)0.4;
+            mile = ((Float.parseFloat(userH) - 100) * step[i]) / 100;
+            mPerC = (float) (3.7103 + 0.2678 * Float.parseFloat(userW) + (0.0359 * step[i] * 60 * 0.0006213) * 2) * Float.parseFloat(userW);
+            graph1[i] = (float) (mile * mPerC * 0.00006213);
+
             Log.d("count",graph1[i]+"");
             sSum+=step[i];
             kSum+=graph1[i];
-
-            if (maxValue < graph1[i])
+            if (maxValue <= graph1[i])
                 maxValue = (int) graph1[i];
-        }
 
+        }
+        increment = maxValue/8;
         kAvg = kSum/size;
         TextView monthKcal = (TextView)getActivity().findViewById(R.id.mMonthKcal);
         int kcals = (int)kAvg;

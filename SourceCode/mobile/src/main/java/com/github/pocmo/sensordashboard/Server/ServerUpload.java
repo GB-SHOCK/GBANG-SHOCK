@@ -57,7 +57,7 @@ public class ServerUpload {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    String link = "http://52.78.78.185/eatingtable_upload.php";//http://52.78.6.137/sensordata_insert.html
+                    String link = "http://52.78.246.112/eatingtable_upload.php";//http://52.78.6.137/sensordata_insert.html
                     SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
                     SimpleDateFormat timeFormat = new SimpleDateFormat("HH-mm-ss");
 

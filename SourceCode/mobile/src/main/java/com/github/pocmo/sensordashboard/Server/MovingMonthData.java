@@ -80,7 +80,7 @@ public class MovingMonthData {
 
                 BufferedReader bufferedReader = null;
                 try {
-                    String link = "http://52.78.78.185/moving_month.php";
+                    String link = "http://52.78.246.112/moving_month.php";
 
                     String data = URLEncoder.encode("USERID", "UTF-8") + "=" + URLEncoder.encode(userID, "UTF-8");
                     //String uri = params[0];

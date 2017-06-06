@@ -95,7 +95,7 @@ public class LoginActivity extends Activity {
         try{
 
             httpclient=new DefaultHttpClient();
-            httppost= new HttpPost("http://52.78.78.185/userCheck.php"); // make sure the url is correct.
+            httppost= new HttpPost("http://52.78.246.112/userCheck.php"); // make sure the url is correct.
             //add your data
             nameValuePairs = new ArrayList<NameValuePair>(2);
             // Always use the same variable name for posting i.e the android side variable name and php side variable name should be similar,

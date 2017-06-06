@@ -53,7 +53,7 @@ public class UserInformUpload {
             @Override
             protected String doInBackground(String... params) {
                 try {
-                    String link = "http://52.78.78.185/userInfoUpload.php";
+                    String link = "http://52.78.246.112/userInfoUpload.php";
 
                     String id = (String) params[0];
                     String pw = (String) params[1];

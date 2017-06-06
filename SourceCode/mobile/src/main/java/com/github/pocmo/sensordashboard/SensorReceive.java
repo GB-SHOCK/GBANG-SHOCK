@@ -45,7 +45,7 @@ public class SensorReceive extends AsyncTask<Void, Integer, Long> {
             (serverIP >> 24 & 0xff));*/
 
     private String TAG = "SensorReceive";
-    public String SERVERIP = "192.168.25.22"; // 'Within' the emulator!
+    public String SERVERIP = "172.20.10.7"; // 'Within' the emulator!
     public static final int SERVERPORT = 12345;
 
     public int countE = 0;

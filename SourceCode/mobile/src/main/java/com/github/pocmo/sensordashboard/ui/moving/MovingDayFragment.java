@@ -206,23 +206,21 @@ public class MovingDayFragment extends Fragment {
             if (step.containsKey(i)) {
                 current = step.get(i);
                 tempStep = current - last;
-                mile = ((Float.parseFloat(userH)- 100)  * tempStep)/100;
-                mPerC = (float) (3.7103 + 0.2678*Float.parseFloat(userW) + (0.0359*tempStep*60*0.0006213)*2)*Float.parseFloat(userW);
-                graph1[legendIdx] = (float) (mile * mPerC *  0.00006213);
+                mile = ((Float.parseFloat(userH) - 100) * tempStep) / 100;
+                mPerC = (float) (3.7103 + 0.2678 * Float.parseFloat(userW) + (0.0359 * tempStep * 60 * 0.0006213) * 2) * Float.parseFloat(userW);
+                graph1[legendIdx] = (float) (mile * mPerC * 0.00006213);
 //                  graph1[legendIdx] = current - last ;
-                    legendArr[legendIdx] = i + "";
-                    legendIdx++;
-               // }
+                legendArr[legendIdx] = i + "";
+                legendIdx++;
+                // }
                 last = current;
 
-                if (maxValue < step.get(i)) {
+                if (maxValue <= step.get(i)) {
                     maxValue = step.get(i);
                 }
-
             }
-
-
         }
+        increment = maxValue/8;
 
 
         List<CurveGraph> arrGraph = new ArrayList<CurveGraph>();
@@ -305,7 +303,7 @@ public class MovingDayFragment extends Fragment {
                     Map<PermissionKey, Boolean> resultMap = result.getResultMap();
 
                     if (resultMap.containsValue(Boolean.FALSE)) {
-                        drawStepCount("");
+                        drawStepCount("0");
                         showPermissionAlarmDialog();
                     } else {
                         // Get the current step count and display it
@@ -326,7 +324,7 @@ public class MovingDayFragment extends Fragment {
     마일당 칼로리 = 3.7103 + 0.2678 × 몸무게 + [0.0359× ( 걸음수 × 60 × 0.0006213)2] × 몸무게
     거리 (m) = [(신장 - 100 ) × 걸음수 ]/100
         */
-        float mile, mPerC,kcal;
+        float mile, mPerC,kcal=0;
         mile = ((Float.parseFloat(userH)- 100)  * Integer.parseInt(count))/100;
         mPerC = (float) (3.7103 + 0.2678*Float.parseFloat(userW) + (0.0359*Float.parseFloat(count)*60*0.0006213)*2)*Float.parseFloat(userW);
         kcal = (float) (mile * mPerC *  0.00006213);

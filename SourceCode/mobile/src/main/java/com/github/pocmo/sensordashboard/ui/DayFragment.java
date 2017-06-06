@@ -41,6 +41,15 @@ public class DayFragment extends Fragment {
 
     SharedPreferences stepCal;
 
+    //user info read
+    SharedPreferences user;
+    private String userA;
+    private String userG;
+    private String userH;
+    private String userW;
+    private float userBMR;
+
+
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -57,6 +66,25 @@ public class DayFragment extends Fragment {
         context = this.getActivity();
 
         stepCal = context.getSharedPreferences("step", context.MODE_PRIVATE);
+
+        //user inform download
+        user = context.getSharedPreferences("user", context.MODE_PRIVATE);
+        userA = user.getString("userAge", "1");
+        userG = user.getString("userGender", "m");
+        userH = user.getString("userHeight", "1");
+        userW = user.getString("userWeight", "1");
+
+
+        //l   BMR(남)  = (10 × W) + (6.25 × H) - (5 × A) + 5
+        // l   BMR(여) = (10 × W) + (6.25 × H) - (5 × A) – 161
+
+        if(userG.equals("m")){
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) + 5);
+        }
+        else{
+            userBMR = (float) ((10 * Float.parseFloat(userW)) + (6.25 * Float.parseFloat(userH)) - (5 * Float.parseFloat(userA)) - 161);
+        }
+
 
         int cnt = 0;
         //sharedpreferences values assigned hashMap.
@@ -78,7 +106,7 @@ public class DayFragment extends Fragment {
         LineGraphVO vo = makeLineCompareGraphAllSetting();
 
         //default setting
-//		LineGraphVO vo = makeLineCompareGraphDefaultSetting();
+//      LineGraphVO vo = makeLineCompareGraphDefaultSetting();
 
         dayEatingShockGraphView.addView(new LineCompareGraphView(this.getActivity(), vo));
     }
@@ -127,73 +155,84 @@ public class DayFragment extends Fragment {
 
         data = download.getDataList();
 
-        //GRAPH SETTING
-        String[] legendTemp = new String[stepCalorie.size()];
-        float[] graph1Temp = new float[data.size()];
-        int index = 0;
-        int last = 0;
-        int current = 0;
-        float totalGraph1 = 0, totalGraph2 = 0;
+        if(data.size()!=0)
+        {
+            //GRAPH SETTING
+            String[] legendTemp = new String[24];
+            float[] graph1Temp = new float[data.size()];
+            int index = 0;
+            int last = 0;
+            int current = 0;
+            float totalGraph1 = 0, totalGraph2 = 0;
+            float tempStep, mile, mPerC;
 
-        for (int i = 0; i < data.size(); i++) {
-            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
-            String[] t = dateFormat.format(System.currentTimeMillis()).split("-");
+            for (int i = 0; i < data.size(); i++) {
+                SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+                String[] t = dateFormat.format(System.currentTimeMillis()).split("-");
 
-            String arr[] = data.get(i).get(TAG_DATE).split("-");
-            if (!t[0].equals(arr[0]) || !t[1].equals(arr[1]) || !t[2].equals(arr[2]))
-                continue;
-            else {
-                legendTemp[index] = Integer.parseInt(arr[3]) + "";
-                Log.d("time", legendTemp[index]);
+                String arr[] = data.get(i).get(TAG_DATE).split("-");
+                if (!t[0].equals(arr[0]) || !t[1].equals(arr[1]) || !t[2].equals(arr[2]))
+                    continue;
+                else {
+                    legendTemp[index] = Integer.parseInt(arr[3]) + "";
+                    Log.d("time", legendTemp[index]);
 
-                graph1Temp[index] = Float.parseFloat(data.get(i).get(TAG_COUNT)) * 12;
+                    graph1Temp[index] = Float.parseFloat(data.get(i).get(TAG_COUNT)) * 12;
 
-                totalGraph1 += graph1Temp[index];
+                    totalGraph1 += graph1Temp[index];
 
-                if (maxValue < Integer.parseInt(data.get(i).get(TAG_COUNT)))
-                    maxValue = Integer.parseInt(data.get(i).get(TAG_COUNT));
-                index++;
+                    if (maxValue <= Integer.parseInt(data.get(i).get(TAG_COUNT)))
+                        maxValue = Integer.parseInt(data.get(i).get(TAG_COUNT));
+                    index++;
+
+
+                }
             }
-        }
 
-        String[] legendArr = new String[index];
-        float[] graph1 = new float[index];
-        //   float[] graph2 = new float[data.size()];
-        float[] graph2 = new float[stepCalorie.size()];
+            String[] legendArr = new String[index];
+            float[] graph1 = new float[index];
+            //   float[] graph2 = new float[data.size()];
+            float[] graph2 = new float[24];
 
-        for (int i = 0; i < index; i++) {
-            legendArr[i] = legendTemp[i];
-            graph1[i] = graph1Temp[i];
-        }
-
-        index = 0;
-
-        for (int i = 0; i < 24; i++) {
-            if (stepCalorie.containsKey(i)) {
-                current = stepCalorie.get(i);
-                graph2[index] = (current - last) * (float)0.5;
-                //legendArr[index] = i + "";
-                index++;
-                // }
-                last = current;
+            for (int i = 0; i < index; i++) {
+                legendArr[i] = legendTemp[i];
+                graph1[i] = graph1Temp[i];
             }
-        }
 
+            index = 0;
 
-        List<LineGraph> arrGraph = new ArrayList<LineGraph>();
+            for (int i = 0; i < 24; i++) {
+                if (stepCalorie.containsKey(i)) {
+                    current = stepCalorie.get(i);
+                    tempStep = current - last;
+                    mile = ((Float.parseFloat(userH) - 100) * tempStep) / 100;
+                    mPerC = (float) (3.7103 + 0.2678 * Float.parseFloat(userW) + (0.0359 * tempStep * 60 * 0.0006213) * 2) * Float.parseFloat(userW);
+                    graph2[index] = (float) (mile * mPerC * 0.00006213);
+                    totalGraph2+=graph2[index];
+                    index++;
 
-        arrGraph.add(new LineGraph("eating", 0xaabaaca1, graph1, R.drawable.rice));
-        arrGraph.add(new LineGraph("moving", 0xaa8c705d, graph2, R.drawable.run));
+                    last = current;
+                }
+            }
 
-        LineGraphVO vo = new LineGraphVO(paddingBottom, paddingTop, paddingLeft, paddingRight,
-                marginTop, marginRight, maxValue, increment, legendArr, arrGraph);
+            totalGraph2+=userBMR;
 
-        //set animation
-        vo.setAnimation(new GraphAnimation(GraphAnimation.LINEAR_ANIMATION, GraphAnimation.DEFAULT_DURATION));
-        //set graph name box
-        vo.setGraphNameBox(new GraphNameBox());
+            increment = maxValue/8;
 
-        //use icon
+            List<LineGraph> arrGraph = new ArrayList<LineGraph>();
+
+            arrGraph.add(new LineGraph("eating", 0xaabaaca1, graph1, R.drawable.rice));
+            arrGraph.add(new LineGraph("moving", 0xaa8c705d, graph2, R.drawable.run));
+
+            LineGraphVO vo = new LineGraphVO(paddingBottom, paddingTop, paddingLeft, paddingRight,
+                    marginTop, marginRight, maxValue, increment, legendArr, arrGraph);
+
+            //set animation
+            vo.setAnimation(new GraphAnimation(GraphAnimation.LINEAR_ANIMATION, GraphAnimation.DEFAULT_DURATION));
+            //set graph name box
+            vo.setGraphNameBox(new GraphNameBox());
+
+            //use icon
 //		arrGraph.add(new Graph(0xaa66ff33, graph1, R.drawable.icon1));
 //		arrGraph.add(new Graph(0xaa00ffff, graph2, R.drawable.icon2));
 //		arrGraph.add(new Graph(0xaaff0066, graph3, R.drawable.icon3));
@@ -201,14 +240,26 @@ public class DayFragment extends Fragment {
 //		LineGraphVO vo = new LineGraphVO(
 //				paddingBottom, paddingTop, paddingLeft, paddingRight,
 //				marginTop, marginRight, maxValue, increment, legendArr, arrGraph, R.drawable.bg);
-        if (totalGraph1 - totalGraph2 >= 0) {
-            coachView.setText("하루 칼로리보다 " + (totalGraph1 - totalGraph2) + "kcal 더 드셨습니다.\n그만드세요");
+        //    coachView = (TextView) getActivity().findViewById(R.id.coachingView);
+            if (totalGraph1>totalGraph2) {
+                coachView.setText("하루 권장 칼로리보다 " + (totalGraph1 - totalGraph2) + "kcal 더 드셨습니다.\n 잘하셨지만, 무조건 굶는 것은 요요의 지름길!");
 
-        } else {
-            coachView.setText("하루 칼로리보다 " + (totalGraph2 - totalGraph1) + "kcal 덜 드셨습니다.\n더 드세요");
+            }
+            else if(totalGraph1==0){
+
+                coachView.setText("오늘은 식사를 하지 않으셨네요! 규칙적인 식사가 중요합니다!");
+
+            }
+            else if(totalGraph1==totalGraph2){
+
+                coachView.setText("오늘은 권장 칼로리 모두 섭취! 잘하셨습니다!! 지금 운동하면 지방이 SHOCK!");
+            }
+            else {
+                coachView.setText("하루 권장 칼로리보다 " + (totalGraph2 - totalGraph1) + "kcal 덜 드셨습니다.\n 잘 하셨지만, 규칙적인 식사만이 건강을 유지할 수 있는 법!");
+            }
+            return vo;
         }
-        return vo;
-
+        return makeLineCompareGraphDefaultSetting();
     }
 
     @Override

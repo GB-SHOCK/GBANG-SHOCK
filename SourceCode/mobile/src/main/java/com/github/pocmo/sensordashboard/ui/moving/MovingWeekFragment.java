@@ -1,5 +1,7 @@
 package com.github.pocmo.sensordashboard.ui.moving;
 
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.os.Bundle;
@@ -31,6 +33,10 @@ public class MovingWeekFragment  extends Fragment {
     private ArrayList<HashMap<String, String>> week;
     private static final String TAG_DATE = "timestamp";
     private static final String TAG_COUNT = "step_count";
+    private Context c;
+    SharedPreferences user;
+    private String userH;
+    private String userW;
 
     @Nullable
     @Override
@@ -46,7 +52,11 @@ public class MovingWeekFragment  extends Fragment {
     public void onViewCreated(View view, Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
         movingWeekGraphView = (ViewGroup) rootView.findViewById(R.id.movingWeekGraphView);
-
+        c = this.getActivity();
+        //user info read
+        user = c.getSharedPreferences("user", c.MODE_PRIVATE);
+        userH = user.getString("userHeight", "1");
+        userW = user.getString("userWeight","1");
         //   setCurveGraph();
     }
 
@@ -100,9 +110,8 @@ public class MovingWeekFragment  extends Fragment {
 
         //max value
         int maxValue = CurveGraphVO.DEFAULT_MAX_VALUE;
-
         //increment
-        int increment = CurveGraphVO.DEFAULT_INCREMENT;
+        int increment = 500;
 
 
         week = weekData.getDataList();
@@ -114,6 +123,7 @@ public class MovingWeekFragment  extends Fragment {
 
         float[] graph1 = new float[size];
         float[] step = new float[size];
+        float mile, mPerC;
 
         for (int i = 0; i < size; i++) {
             SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
@@ -124,14 +134,18 @@ public class MovingWeekFragment  extends Fragment {
             Log.d("time", legendArr[i]);
 
             step[i] = Float.parseFloat(week.get(i).get(TAG_COUNT));
-            graph1[i] = step[i] * (float)0.4;
+            mile = ((Float.parseFloat(userH) - 100) * step[i]) / 100;
+            mPerC = (float) (3.7103 + 0.2678 * Float.parseFloat(userW) + (0.0359 * step[i] * 60 * 0.0006213) * 2) * Float.parseFloat(userW);
+            graph1[i] = (float) (mile * mPerC * 0.00006213);
+
             Log.d("count",graph1[i]+"");
             sSum+=step[i];
             kSum+=graph1[i];
 
-            if (maxValue < graph1[i])
+            if (maxValue <= graph1[i])
                 maxValue = (int) graph1[i];
         }
+        increment = maxValue/8;
 
         kAvg = kSum/size;
         TextView weekKcal = (TextView)getActivity().findViewById(R.id.mWeekKcal);
